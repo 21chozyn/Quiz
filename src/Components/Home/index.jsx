@@ -1,13 +1,14 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import RulesPopup from "../RulesPopup";
 import Popup from "reactjs-popup";
+import { useQuiz } from "../QuizHook";
 
 
 const index = () => {
-  const [quizData, setQuizData] = useState([]); // Declare quizData state and setQuizData function
-  const [openPopup, setOpenPopUp] = useState(false); // openPopup determines when to open and close the popup
+  const [openPopup, setOpenPopUp] = useState(false); // openPopup determines when to open and close the popup.
+  const {quizData,setQuizData}= useQuiz() //this gets the quizData and setquizData method from our custom hook.
 
   const fetchQuestions = () => {
     // Fetch questions on function call
@@ -30,9 +31,10 @@ const index = () => {
     fetchQuestions();
     setOpenPopUp((curState)=>!curState)
   };
-  useEffect(() => {
-    console.log(quizData);
-  }, [quizData]);
+  useEffect(()=>{
+    console.log(quizData)
+  },[quizData])
+
   return (
     <>
       <h1>Welcome to the quiz app</h1>
