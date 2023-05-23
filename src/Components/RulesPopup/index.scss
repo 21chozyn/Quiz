@@ -1,0 +1,25 @@
+
+.rules{
+    ul {
+        padding-left: 2rem;
+        list-style-type: none;
+      }
+      
+      ul li {
+        padding-left: 2rem;
+        background-image: url("../../Images/star.svg");
+        background-position: 0 0;
+        background-size: 1.3rem 1.3rem;
+        background-repeat: no-repeat;
+      }
+      a{
+        position: relative;
+        width: 100%;
+        text-align: center;
+        display: block;
+        font-size: 1.5rem;
+        text-decoration: none;
+        color: red;
+
+      }
+}
