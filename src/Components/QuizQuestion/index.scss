@@ -1,0 +1,35 @@
+.question--container {
+  margin: 5px;
+  em {
+    color: orangered;
+    font-size: 1.3rem;
+  }
+  .answer {
+    display: inline-block;
+    width: 80%;
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: white;
+    color: black;
+    text-align: center;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    position: relative;
+    left: 50%;
+    top: 0%;
+    transform: translate(-50%, -50%) ;
+  }
+
+  .answer:hover {
+    background-color: #8a7fb5;
+  }
+
+  .answer:active {
+    background-color: #8a7fb5;
+    box-shadow: 0 5px #666;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+
+  border: 2px solid black;
+}

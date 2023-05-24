@@ -1,7 +1,7 @@
 import './App.scss'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Components/Home"
-
+import Quiz from "./Components/Quiz";
 function App() {
 
   return (
@@ -12,6 +12,7 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path='/quiz' element={<Quiz/>}/>
       </Routes>
       
     </Router>
