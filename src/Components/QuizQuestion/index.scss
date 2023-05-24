@@ -5,7 +5,8 @@
     font-size: 1.3rem;
   }
   .answer {
-    display: inline-block;
+    display: grid;
+    grid-template-columns: 14fr 1fr;
     width: 80%;
     padding: 10px 20px;
     margin: 10px;
@@ -19,16 +20,23 @@
     left: 50%;
     top: 0%;
     transform: translate(-50%, -50%) ;
+    svg{
+      display: none;
+    }
   }
-
   .answer:hover {
     background-color: #8a7fb5;
   }
-
   .answer:active {
     background-color: #8a7fb5;
     box-shadow: 0 5px #666;
     transform: translate(-50%, -50%) scale(1.05);
+  }
+  .answered{
+    svg{
+          display: inherit;
+
+    }
   }
 
   border: 2px solid black;

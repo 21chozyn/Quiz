@@ -1,14 +1,16 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import RulesPopup from "../RulesPopup";
 import Popup from "reactjs-popup";
 import { useQuiz } from "../QuizHook";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { NavLink } from "react-router-dom";
 
 const index = () => {
   const [openPopup, setOpenPopUp] = useState(false); // openPopup determines when to open and close the popup.
-  const {quizData,setQuizData}= useQuiz() //this gets the quizData and setquizData method from our custom hook.
+  const { quizData, setQuizData } = useQuiz(); //this gets the quizData and setquizData method from our custom hook.
 
   const fetchQuestions = () => {
     // Fetch questions on function call
@@ -23,17 +25,17 @@ const index = () => {
         console.error(error);
       });
   };
-  const closePopUp =()=>{
+  const closePopUp = () => {
     setOpenPopUp(false);
-
-  }
+  };
   const handleStartQuiz = () => {
     fetchQuestions();
-    setOpenPopUp((curState)=>!curState)
+    setOpenPopUp((curState) => !curState);
   };
-  useEffect(()=>{
-    console.log(quizData)
-  },[quizData])
+  const openSettings = () => {};
+  useEffect(() => {
+    console.log(quizData);
+  }, [quizData]);
 
   return (
     <>
@@ -45,6 +47,12 @@ const index = () => {
       >
         Play now
       </button>
+      <NavLink to="/settings">
+        <FontAwesomeIcon icon={faGear} />
+      </NavLink>
+      <div className="setting-container" onClick={openSettings}>
+        <FontAwesomeIcon icon={faGear} />
+      </div>
       <Tooltip id="playNowTooltip"></Tooltip>
       <Popup open={openPopup} closeOnDocumentClick onClose={closePopUp}>
         <RulesPopup></RulesPopup>

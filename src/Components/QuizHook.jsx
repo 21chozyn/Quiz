@@ -74,8 +74,33 @@ const quizContext = createContext();
 export const useQuiz = () => useContext(quizContext);
 export default function QuizProvider({ children }) {
   const [quizData, setQuizData] = useState(quiz_data);
+  const [questionsLimit, setQuestionsLimit] = useState(10);
+  const [categories, setCategories] = useState({
+    general_knowledge: true,
+    film_and_tv: false,
+    music: false,
+    history: false,
+    geography: false,
+    arts_and_literature: false,
+    sport_and_leisure: false,
+    general_knowledge: false,
+    science: false,
+    food_and_drink: false,
+  });
+  const [difficulty, setDifficulty] = useState("medium");
   return (
-    <quizContext.Provider value={{ quizData, setQuizData }}>
+    <quizContext.Provider
+      value={{
+        quizData,
+        setQuizData,
+        questionsLimit,
+        setQuestionsLimit,
+        categories,
+        setCategories,
+        difficulty,
+        setDifficulty,
+      }}
+    >
       {children}
     </quizContext.Provider>
   );

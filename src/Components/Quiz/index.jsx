@@ -15,7 +15,7 @@ const index = () => {
         return (<QuizQuestion 
             questionNr={`Question ${index}/${quizData.length}`} 
             question={question.question}
-            answers={[...question.incorrectAnswers,question.correctAnswer].sort(()=>0.5-Math.random())}
+            answers={[...question.incorrectAnswers,question.correctAnswer].sort((a,b)=>0.5-Math.random())}
             correctAnswer={question.correctAnswer}
             category={question.category}
             ></QuizQuestion>)
