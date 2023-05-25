@@ -86,6 +86,7 @@ export default function QuizProvider({ children }) {
     general_knowledge: false,
     science: false,
     food_and_drink: false,
+    society_and_culture:false
   });
   const [difficulty, setDifficulty] = useState("medium");
   return (

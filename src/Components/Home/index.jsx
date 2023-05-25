@@ -1,28 +1,34 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { Tooltip } from "react-tooltip";
 import RulesPopup from "../RulesPopup";
 import Popup from "reactjs-popup";
 import { useQuiz } from "../QuizHook";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const index = () => {
   const [openPopup, setOpenPopUp] = useState(false); // openPopup determines when to open and close the popup.
-  const { quizData, setQuizData } = useQuiz(); //this gets the quizData and setquizData method from our custom hook.
-
+  const { setQuizData, questionsLimit, categories, difficulty } =
+    useQuiz(); //this gets the quizData and setquizData method from our custom hook.
+  const navigate = useNavigate();
+  const client = axios.create({
+    baseURL: "https://the-trivia-api.com/api/questions",
+  });
   const fetchQuestions = () => {
     // Fetch questions on function call
-    axios
-      .get("https://the-trivia-api.com/v2/questions")
+    const categoriesStr = Object.entries(categories) //this takes all the selected categories and turns it into a string
+      .filter((category) => category[1])
+      .map((category) => category[0])
+      .join(",");
+
+    client
+      .get(
+        `?categories=${categoriesStr}&limit=${questionsLimit}&difficulty=${difficulty}`
+      )
       .then((response) => {
-        // Set the quizdata state with the fetched data
         setQuizData(response.data);
-      })
-      .catch((error) => {
-        // Handle the error
-        console.error(error);
       });
   };
   const closePopUp = () => {
@@ -32,27 +38,27 @@ const index = () => {
     fetchQuestions();
     setOpenPopUp((curState) => !curState);
   };
-  const openSettings = () => {};
-  useEffect(() => {
-    console.log(quizData);
-  }, [quizData]);
 
   return (
     <>
       <h1>Welcome to the quiz app</h1>
-      <button
+      <div
+        className="playNow btn"
         data-tooltip-id="playNowTooltip"
         data-tooltip-content="Tip: edit difficulty and categories in settings!"
         onClick={handleStartQuiz}
       >
         Play now
-      </button>
-      <NavLink to="/settings">
-        <FontAwesomeIcon icon={faGear} />
-      </NavLink>
-      <div className="setting-container" onClick={openSettings}>
+      </div>
+      <div
+        className="toSettings btn"
+        onClick={() => {
+          navigate("/settings");
+        }}
+      >
         <FontAwesomeIcon icon={faGear} />
       </div>
+
       <Tooltip id="playNowTooltip"></Tooltip>
       <Popup open={openPopup} closeOnDocumentClick onClose={closePopUp}>
         <RulesPopup></RulesPopup>

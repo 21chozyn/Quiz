@@ -19,3 +19,16 @@ body {
   h2,h1{
     text-align: center;
   }
+  .btn{
+    // font-family: "college";
+    background-color: #8a7fb5;
+    min-width: 120px;
+    min-height: 50px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.5s;
+  }

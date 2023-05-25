@@ -1,17 +1,16 @@
 import React, { useEffect } from "react";
 import { useQuiz } from "../QuizHook";
 import "./index.scss";
+import { useNavigate } from "react-router-dom";
 const index = () => {
   const {
-    quizData,
-    setQuizData,
     questionsLimit,
     setQuestionsLimit,
     categories,
     setCategories,
     difficulty,
     setDifficulty,
-  } = useQuiz();
+  } = useQuiz(); // this is to get the state variables from useQuiz custom hook
   const allCategories = [
     "Arts & Literature",
     "Film & TV",
@@ -23,18 +22,24 @@ const index = () => {
     "Science",
     "Society & Culture",
     "Sport & Leisure",
-  ];
+  ]; // these are all the availablecategories in the trivia api
+  const navigate = useNavigate();
   const handleTxtChange = (event) => {
+    //this function is responsible for changing number of questions per session
     const regex = /^[0-9\b]+$/;
     if (regex.test(event.target.value)) {
       setQuestionsLimit(event.target.value);
     }
   };
   const handleCategoryChange = (event) => {
-    setCategories({...categories,[event.target.name]:event.target.checked})
-
+    //this function is responsible for changing wether or not a category will be present in the session
+    setCategories({ ...categories, [event.target.name]: event.target.checked });
   };
-
+  const handleDifficultyChange = (event) => {
+    setDifficulty(event.target.value);
+  };
+  useEffect(()=>{console.log(categories)
+  },[categories])
   return (
     <>
       <h1>Settings</h1>
@@ -53,8 +58,8 @@ const index = () => {
       </div>
       <div className="setting-category">
         <h5>Categories</h5>
-        <form >
-          {allCategories.map((category,index) => {
+        <div>
+          {allCategories.map((category, index) => {
             const regex1 = / /g;
             const regex2 = /&/g;
             const formatedName = category
@@ -73,7 +78,50 @@ const index = () => {
               </label>
             );
           })}
-        </form>
+        </div>
+      </div>
+      <div className="setting-category">
+        <h5>Difficulty</h5>
+        <div>
+          <label>
+            <input
+              type="radio"
+              name="easy"
+              value="easy"
+              checked={difficulty === "easy"}
+              onChange={handleDifficultyChange}
+            />
+            Easy
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="medium"
+              value="medium"
+              checked={difficulty === "medium"}
+              onChange={handleDifficultyChange}
+            />
+            Medium
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="hard"
+              value="hard"
+              checked={difficulty === "hard"}
+              onChange={handleDifficultyChange}
+            />
+            Hard
+          </label>
+        </div>
+      </div>
+      <div
+        className="toHome btn"
+        onClick={() => {
+          navigate("/")
+        }}
+      >
+        Home
       </div>
     </>
   );
