@@ -14,7 +14,6 @@
     color: black;
     text-align: center;
     font-size: 1rem;
-    cursor: pointer;
     border-radius: 5px;
     position: relative;
     left: 50%;
@@ -23,11 +22,17 @@
     svg{
       display: none;
     }
+    .answer-txt{
+      pointer-events: none; //this is to prevent the inner div to be clickable
+    }
   }
-  .answer:hover {
+  .notAnswered{
+    cursor: pointer;
+  }
+  .notAnswered:hover {
     background-color: #8a7fb5;
   }
-  .answer:active {
+  .notAnswered:active {
     background-color: #8a7fb5;
     box-shadow: 0 5px #666;
     transform: translate(-50%, -50%) scale(1.05);
@@ -37,6 +42,9 @@
           display: inherit;
 
     }
+  }
+  .correct{
+    background-color: #8a7fb5;
   }
 
   border: 2px solid black;
