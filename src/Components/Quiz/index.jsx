@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useQuiz } from "../QuizHook";
 import QuizQuestion from "../QuizQuestion";
-import "./index.scss"
+import "./index.scss";
 
 const index = () => {
   const { quizData, difficulty, questionsLimit, categories } = useQuiz(); //to get the quiz questions from the useQuiz hook
@@ -10,30 +10,33 @@ const index = () => {
       .filter((category) => category[1])
       .map((category) => category[0])
       .toString();
-    if (categoriesStr === ""){
-      return "GENERAL KNOWLEDGE"
+    if (categoriesStr === "") {
+      return "GENERAL KNOWLEDGE";
     }
-    return categoriesStr.replaceAll("_"," ").replaceAll(",",",  ").toUpperCase()
+    return categoriesStr
+      .replaceAll("_", " ")
+      .replaceAll(",", ",  ")
+      .toUpperCase();
   };
   useEffect(() => {
-    console.log(
-      showCategories()
-    );
+    document.body.style.overflow = "hidden";
+    console.log(showCategories());
   }, []);
+
   return (
     <>
-      <h1>Quiz</h1>
-      <div className="details container">
-        <h5>{difficulty.toUpperCase()}</h5>
-        <h5>{questionsLimit} QUESTIONS TOTAL</h5>
-        <h5>
-          {showCategories()}
-        </h5>
+      <div className="header">
+        <h1>Quiz</h1>
+        <div className="details container">
+          <h5>{difficulty.toUpperCase()}</h5>
+          <h5>{questionsLimit} QUESTIONS TOTAL</h5>
+          <h5>{showCategories()}</h5>
+        </div>
       </div>
       {quizData.map((question, index) => {
         return (
           <QuizQuestion
-            questionNr={`Question ${index + 1}/${quizData.length}`}
+            questionNr={{ num: index + 1, total: quizData.length }}
             question={question.question}
             answers={[
               ...question.incorrectAnswers,
@@ -41,6 +44,12 @@ const index = () => {
             ].sort((a, b) => 0.5 - Math.random())}
             correctAnswer={question.correctAnswer}
             category={question.category}
+            expiryTimeStamp={() => {
+              const currentDate = new Date();
+              currentDate.setSeconds(currentDate.getSeconds() + 100000);
+              return currentDate;
+            }}
+            timePerQuestion={30}
             key={index}
           ></QuizQuestion>
         );

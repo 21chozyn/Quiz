@@ -18,15 +18,15 @@
     position: relative;
     left: 50%;
     top: 0%;
-    transform: translate(-50%, -50%) ;
-    svg{
+    transform: translate(-50%, -50%);
+    svg {
       display: none;
     }
-    .answer-txt{
+    .answer-txt {
       pointer-events: none; //this is to prevent the inner div to be clickable
     }
   }
-  .notAnswered{
+  .notAnswered {
     cursor: pointer;
   }
   .notAnswered:hover {
@@ -37,15 +37,57 @@
     box-shadow: 0 5px #666;
     transform: translate(-50%, -50%) scale(1.05);
   }
-  .answered{
-    svg{
-          display: inherit;
-
+  .answered {
+    svg {
+      display: inherit;
     }
   }
-  .correct{
+  .correct {
     background-color: #8a7fb5;
   }
 
   border: 2px solid black;
+
+  progress {
+    opacity: 0;
+  }
+  .progress-container {
+    position: relative;
+    display: inline-block;
+    background: #eee;
+    height: 5px;
+    transform: translateY(5px);
+    border-radius: 6px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .progress-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background-color: #8a7fb5;
+    animation: timerAnimation 15s linear forwards ;
+
+  }
+  .time-left{
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 0;
+  }
+  @keyframes timerAnimation {
+    from{
+      width: 0%;
+      background-color: #8a7fb5;
+    }
+    to{
+      width: 100%;
+      background-color: red;
+    }
+    
+  }
 }
+

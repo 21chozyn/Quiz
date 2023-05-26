@@ -1,7 +1,15 @@
-.details{
+.header {
+    position: fixed;
+    width: 99%;
+    z-index: 999;
+    background-color: #8a7fb5;
+    top: 0;
+    border-radius: 0 0 5px 5px;
+  .details {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    h5{
-        text-align: center;
+    h5 {
+      text-align: center;
     }
+  }
 }
