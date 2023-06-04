@@ -4,7 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { useTimer } from "react-timer-hook";
-import { useIsVisible } from "../Home/Hooks/useIsVisible";
+import { useIsVisible } from "../Hooks/useIsVisible";
+import { useQuiz } from "../Hooks/QuizHook";
+import { useNavigate } from "react-router-dom";
 library.add(faCheck, faXmark); //this removes annoying console message "cannot find icon"
 
 const index = ({
@@ -20,12 +22,13 @@ const index = ({
   const isVisible = useIsVisible(curQuizRef);
   const [answClassName, setAnswClassName] = useState("answer notAnswered");
   const [progressBarClassName, setProgressBarClassName] = useState("");
-  // const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [qnIsAnswered, setQnIsAnswered] = useState(false); // this state is used to stop user from clicking answers twice
   const { seconds, start, pause, restart } = useTimer({
     expiryTimeStamp,
     onExpire: () => quizQnFinished(questionNr.num),
   });
+  const { isQuizOver, setIsQuizOver } = useQuiz(); // to get and set the current state of quiz
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     !qnIsAnswered &&
@@ -42,9 +45,9 @@ const index = ({
   };
   const quizQnFinished = (curQuizNum) => {
     //this function is called when a question has been answered or time is up
-     pause();
-   setAnswClassName("answer answered"); // to show wrong and correct answers
-   setProgressBarClassName("") //to remove the progress bar
+    pause();
+    setAnswClassName("answer answered"); // to show wrong and correct answers
+    setProgressBarClassName(""); //to remove the progress bar
     const delay = setTimeout(() => {
       const nextQn = document.getElementById(`question${curQuizNum + 1}`);
       if (nextQn) {
@@ -55,12 +58,15 @@ const index = ({
           inline: "center",
         });
       } else {
-        document.body.style.overflow = "scroll";
+        setIsQuizOver(true);
         console.log("quiz is finished");
+        navigate("/results")
       }
     }, 2000);
   };
-
+  useEffect(() => {
+    isQuizOver && (document.body.style.overflow = "scroll");
+  }, [isQuizOver]);
   useEffect(() => {
     if (isVisible) {
       startTimer();
@@ -93,7 +99,7 @@ const index = ({
       ))}
       <h6>{category}</h6>
       <h6 className="time-left">Time Left: {seconds} seconds</h6>
-      <div className={progressBarClassName} ref={curQuizRef} >
+      <div className={progressBarClassName} ref={curQuizRef}>
         <progress
           className="timer"
           value={timePerQuestion - seconds}

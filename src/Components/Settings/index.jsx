@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useQuiz } from "../QuizHook";
+import { useQuiz } from "../Hooks/QuizHook";
 import "./index.scss";
 import { useNavigate } from "react-router-dom";
 const index = () => {

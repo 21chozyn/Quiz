@@ -89,6 +89,7 @@ export default function QuizProvider({ children }) {
     society_and_culture:false
   });
   const [difficulty, setDifficulty] = useState("medium");
+  const [isQuizOver, setIsQuizOver] = useState(false)
   return (
     <quizContext.Provider
       value={{
@@ -100,6 +101,8 @@ export default function QuizProvider({ children }) {
         setCategories,
         difficulty,
         setDifficulty,
+        isQuizOver,
+        setIsQuizOver
       }}
     >
       {children}

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useQuiz } from "../QuizHook";
+import { useQuiz } from "../Hooks/QuizHook";
 import QuizQuestion from "../QuizQuestion";
 import "./index.scss";
 
 const index = () => {
-  const { quizData, difficulty, questionsLimit, categories } = useQuiz(); //to get the quiz questions from the useQuiz hook
+  const { quizData, difficulty, questionsLimit, categories, isQuizOver } =
+    useQuiz(); //to get the quiz questions from the useQuiz hook
   const showCategories = () => {
     const categoriesStr = Object.entries(categories)
       .filter((category) => category[1])
@@ -19,7 +20,7 @@ const index = () => {
       .toUpperCase();
   };
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    !isQuizOver && (document.body.style.overflow = "hidden");
     console.log(showCategories());
   }, []);
 

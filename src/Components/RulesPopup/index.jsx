@@ -1,5 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
 import "./index.scss";
 
 const rules = [
@@ -18,10 +20,19 @@ const RulesPopup = () => {
           exact="true"
           activeclassname="active"
           to="/quiz"
-          className="team-link"
-          
+          className="team-link"  
         >
-          Got It
+          Proceed with default settings
+        </NavLink>
+        <NavLink
+          exact="true"
+          activeclassname="active"
+          to="/settings"
+          className="team-link"  
+        >
+          Settings {"   "}
+          <FontAwesomeIcon icon={faGear} />
+
         </NavLink>
     </div>
   );

@@ -3,7 +3,7 @@ import React, {  useState } from "react";
 import { Tooltip } from "react-tooltip";
 import RulesPopup from "../RulesPopup";
 import Popup from "reactjs-popup";
-import { useQuiz } from "../QuizHook";
+import { useQuiz } from "../Hooks/QuizHook";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
