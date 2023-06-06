@@ -75,6 +75,7 @@ export const useQuiz = () => useContext(quizContext);
 export default function QuizProvider({ children }) {
   const [quizData, setQuizData] = useState(quiz_data);
   const [questionsLimit, setQuestionsLimit] = useState(10);
+  const [correctQnsCount, setCorrectQnsCount] = useState(0);
   const [categories, setCategories] = useState({
     general_knowledge: true,
     film_and_tv: false,
@@ -86,10 +87,11 @@ export default function QuizProvider({ children }) {
     general_knowledge: false,
     science: false,
     food_and_drink: false,
-    society_and_culture:false
+    society_and_culture: false,
   });
   const [difficulty, setDifficulty] = useState("medium");
-  const [isQuizOver, setIsQuizOver] = useState(false)
+  const [isQuizOver, setIsQuizOver] = useState(false);
+  const [percentage, setPercentage] = useState(null);
   return (
     <quizContext.Provider
       value={{
@@ -102,7 +104,11 @@ export default function QuizProvider({ children }) {
         difficulty,
         setDifficulty,
         isQuizOver,
-        setIsQuizOver
+        setIsQuizOver,
+        correctQnsCount,
+        setCorrectQnsCount,
+        percentage,
+        setPercentage,
       }}
     >
       {children}

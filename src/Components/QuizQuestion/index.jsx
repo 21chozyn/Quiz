@@ -27,13 +27,14 @@ const index = ({
     expiryTimeStamp,
     onExpire: () => quizQnFinished(questionNr.num),
   });
-  const { isQuizOver, setIsQuizOver } = useQuiz(); // to get and set the current state of quiz
+  const { isQuizOver, setIsQuizOver, setCorrectQnsCount } = useQuiz(); // to get and set the current state of quiz
   const navigate = useNavigate();
 
   const handleClick = (event) => {
     !qnIsAnswered &&
       (event.target.style.backgroundColor =
         event.target.id === "correct" ? "#8a7fb5" : "red"); //to change color of the clicked div
+    event.target.id === "correct" && setCorrectQnsCount((prev) => prev + 1);
     setAnswClassName("answer answered");
     setQnIsAnswered(true);
     quizQnFinished(questionNr.num);
@@ -60,7 +61,7 @@ const index = ({
       } else {
         setIsQuizOver(true);
         console.log("quiz is finished");
-        navigate("/results")
+        navigate("/results");
       }
     }, 2000);
   };
