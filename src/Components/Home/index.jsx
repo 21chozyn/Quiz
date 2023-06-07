@@ -28,7 +28,7 @@ const index = () => {
         `?categories=${categoriesStr}&limit=${questionsLimit}&difficulty=${difficulty}`
       )
       .then((response) => {
-        setQuizData(response.data);
+        setQuizData(formatedQuestions(response.data));//this adds a new key to quizdata called random answers
       });
   };
   const closePopUp = () => {
@@ -37,6 +37,16 @@ const index = () => {
   const handleStartQuiz = () => {
     fetchQuestions();
     setOpenPopUp((curState) => !curState);
+  };
+  const formatedQuestions = (theQuizData) => {
+    //this function formats the quizData wih 1:randomised questions and answers so that the correct answer is in a random postion
+    return theQuizData.map((question, index) => ({
+      ...question,
+      randomAnswers: [
+        ...question.incorrectAnswers,
+        question.correctAnswer,
+      ].sort((a, b) => 0.5 - Math.random()),
+    }));
   };
 
   return (

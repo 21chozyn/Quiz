@@ -84,7 +84,6 @@ export default function QuizProvider({ children }) {
     geography: false,
     arts_and_literature: false,
     sport_and_leisure: false,
-    general_knowledge: false,
     science: false,
     food_and_drink: false,
     society_and_culture: false,

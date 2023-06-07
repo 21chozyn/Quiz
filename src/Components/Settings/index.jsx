@@ -50,7 +50,9 @@ const index = () => {
           Update number of questions per session
           <input
             className="limit-txt-box"
-            type="text"
+            type="number"
+            max={50}
+            min={5}
             value={questionsLimit}
             onChange={handleTxtChange}
           />

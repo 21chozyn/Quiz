@@ -8,14 +8,13 @@ import { useIsVisible } from "../Hooks/useIsVisible";
 import { useQuiz } from "../Hooks/QuizHook";
 import { useNavigate } from "react-router-dom";
 library.add(faCheck, faXmark); //this removes annoying console message "cannot find icon"
-
 const index = ({
   questionNr,
   question,
   answers,
   correctAnswer,
   category,
-  expiryTimeStamp,
+  expiryTimestamp,
   timePerQuestion,
 }) => {
   const curQuizRef = useRef();
@@ -23,12 +22,14 @@ const index = ({
   const [answClassName, setAnswClassName] = useState("answer notAnswered");
   const [progressBarClassName, setProgressBarClassName] = useState("");
   const [qnIsAnswered, setQnIsAnswered] = useState(false); // this state is used to stop user from clicking answers twice
-  const { seconds, start, pause, restart } = useTimer({
-    expiryTimeStamp,
+
+  const { seconds, pause, restart } = useTimer({
+    expiryTimestamp,
     onExpire: () => quizQnFinished(questionNr.num),
   });
   const { isQuizOver, setIsQuizOver, setCorrectQnsCount } = useQuiz(); // to get and set the current state of quiz
   const navigate = useNavigate();
+  const quizQnIntervalId = useRef(null); // Create a ref to store the quiz qn interval ID
 
   const handleClick = (event) => {
     !qnIsAnswered &&
@@ -49,7 +50,7 @@ const index = ({
     pause();
     setAnswClassName("answer answered"); // to show wrong and correct answers
     setProgressBarClassName(""); //to remove the progress bar
-    const delay = setTimeout(() => {
+    quizQnIntervalId.current = setTimeout(() => {
       const nextQn = document.getElementById(`question${curQuizNum + 1}`);
       if (nextQn) {
         // 👇 Will scroll smoothly to the top of the next section
@@ -74,6 +75,11 @@ const index = ({
       setProgressBarClassName("progress-container"); //this starts the progressBar animation as it gets into viewport
     }
   }, [isVisible]);
+  useEffect(()=>{//this useefeect clears the useinterval on component unmount
+    return(()=>{
+      clearInterval(quizQnIntervalId.current);
+    })
+  },[])
   return (
     <div
       className="question--container"
