@@ -1,8 +1,94 @@
 .setting-category {
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    border-bottom: 2px solid black;
- .category-label{
-  margin-right: 10px;
- }
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  border-bottom: 2px solid black;
+  .category-label {
+    margin-right: 10px;
+  }
+  .toggle{
+     appearance: none;
+     visibility: hidden;
+     display: none;
+  }
+  .check{
+    position: relative;
+    display: block;
+    width: 40px;
+    height: 20px;
+    background: #0a0327;
+    cursor: pointer;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: ease-in-out 0.5s;
+  }
+  .toggle:checked ~.check{
+    background: rgb(179, 177, 177);
+  }
+  .check::before{
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background: rgb(179, 177, 177);
+    width:16px;
+    height:16px;
+    border-radius: 50%;
+    transition: 1s;
+  }
+  .toggle:checked ~.check::before{
+    transform:translateX(-50px)
+  }
+  .check::after{
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #0a0327;
+    width:16px;
+    height:16px;
+    border-radius: 50%;
+    transition: 1s;
+    transform:translateX(50px)
+
+  }
+  .toggle:checked ~.check::after{
+    transform:translateX(0px)
+  }
+}
+.setting-category:first-child{
+    border-top: 2px solid black;
+}
+.light {
+  color: black;
+  background-color: white;
+}
+.dark {
+  color: rgb(179, 177, 177);
+  background-color: #0a0327;
+  .setting-category {
+    border-bottom: 2px solid rgb(179, 177, 177);
+  }
+  .setting-category:first-child{
+    border-top: 2px solid rgb(179, 177, 177); 
+}
+  .popup {
+    background-color: #8a7fb5;
+    color: black;
+  }
+  .question--container {
+    border: 2px solid rgb(179, 177, 177);
+  }
+  .circular-progress {
+    background: conic-gradient(#7d2ae8 3.6deg, rgb(179, 177, 177) 0deg) !important;
+  }
+  .circular-progress::before {
+    background-color: #0a0327 !important;
+}
+}
+body{
+    transition:  2s;
+}
+input{
+    background-color: inherit;
+    color: inherit;
 }

@@ -10,7 +10,7 @@ const index = () => {
     <div>
       <CircularProgress />
       <span>
-        You answered {correctQnsCount} questions out of {questionsLimit}{" "}
+        You answered {correctQnsCount} {correctQnsCount==1?"question":"questions"} out of {questionsLimit}{" "}
         correct!!
       </span>
       <div className="toHome btn" onClick={() => navigate("/")}>

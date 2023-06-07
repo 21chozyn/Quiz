@@ -1,7 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuiz } from "../Hooks/QuizHook";
 import "./index.scss";
 import { useNavigate } from "react-router-dom";
+const allCategories = [
+  "Arts & Literature",
+  "Film & TV",
+  "Food & Drink",
+  "General Knowledge",
+  "Geography",
+  "History",
+  "Music",
+  "Science",
+  "Society & Culture",
+  "Sport & Leisure",
+]; // these are all the availablecategories in the trivia api
 const index = () => {
   const {
     questionsLimit,
@@ -11,18 +23,12 @@ const index = () => {
     difficulty,
     setDifficulty,
   } = useQuiz(); // this is to get the state variables from useQuiz custom hook
-  const allCategories = [
-    "Arts & Literature",
-    "Film & TV",
-    "Food & Drink",
-    "General Knowledge",
-    "Geography",
-    "History",
-    "Music",
-    "Science",
-    "Society & Culture",
-    "Sport & Leisure",
-  ]; // these are all the availablecategories in the trivia api
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") === null
+      ? "light"
+      : localStorage.getItem("theme")
+    // this is to get the current theme stored in localstorage
+  ); //this is state for dark and light mode
   const navigate = useNavigate();
   const handleTxtChange = (event) => {
     //this function is responsible for changing number of questions per session
@@ -38,8 +44,19 @@ const index = () => {
   const handleDifficultyChange = (event) => {
     setDifficulty(event.target.value);
   };
-  useEffect(()=>{console.log(categories)
-  },[categories])
+  const handleThemeChange = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme); //this changes the them to the selected choice
+    localStorage.setItem("theme", newTheme);
+  };
+  useEffect(() => {
+    console.log(categories);
+  }, [categories]);
+  useEffect(() => {
+    //this updates the body classname with corresponding theme
+    document.body.className = theme;
+  }, [theme]);
+
   return (
     <>
       <h1>Settings</h1>
@@ -50,6 +67,7 @@ const index = () => {
           Update number of questions per session
           <input
             className="limit-txt-box"
+            id="limit-txt-box"
             type="number"
             max={50}
             min={5}
@@ -117,10 +135,27 @@ const index = () => {
           </label>
         </div>
       </div>
+      <div className="setting-category">
+        <h5>Theme</h5>
+        <div>
+          <label>
+            Toggle {theme === "dark" ? "Light" : "Dark"} mode on.
+            <input
+              className="toggle"
+              type="checkbox"
+              name="dark"
+              value="dark"
+              checked={theme === "dark"}
+              onChange={handleThemeChange}
+            />
+            <span className="check"></span>
+          </label>
+        </div>
+      </div>
       <div
         className="toHome btn"
         onClick={() => {
-          navigate("/")
+          navigate("/");
         }}
       >
         Home
