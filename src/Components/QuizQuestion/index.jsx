@@ -27,18 +27,38 @@ const index = ({
     expiryTimestamp,
     onExpire: () => quizQnFinished(questionNr.num),
   });
-  const { isQuizOver, setIsQuizOver, setCorrectQnsCount } = useQuiz(); // to get and set the current state of quiz
+  const {
+    isQuizOver,
+    setIsQuizOver,
+    setCorrectQnsCount,
+    setQuizData,
+    quizData,
+  } = useQuiz(); // to get and set the current state of quiz
   const navigate = useNavigate();
   const quizQnIntervalId = useRef(null); // Create a ref to store the quiz qn interval ID
+  const addUserAnswer = (userAnswer) => {
+    //this function adds answer provided by user to the quizdata
+    const newQuizData = quizData.map((curQn, index) => {
+      if (index + 1 !== questionNr.num) return curQn;
+      return {
+        ...curQn,
+        userAnswer: userAnswer,
+      };
+    });
+    setQuizData(newQuizData);
+  };
 
   const handleClick = (event) => {
-    !qnIsAnswered &&
-      (event.target.style.backgroundColor =
-        event.target.id === "correct" ? "#8a7fb5" : "red"); //to change color of the clicked div
-    event.target.id === "correct" && setCorrectQnsCount((prev) => prev + 1);
-    setAnswClassName("answer answered");
-    setQnIsAnswered(true);
-    quizQnFinished(questionNr.num);
+    if (!qnIsAnswered) {
+      event.target.style.backgroundColor =
+        event.target.id === "correct" ? "#8a7fb5" : "red"; //to change color of the clicked div
+      event.target.id === "correct" && setCorrectQnsCount((prev) => prev + 1);
+      const answer = event.target.querySelector("div").textContent; //this is to get the text inside the inner div
+      addUserAnswer(answer);
+      setAnswClassName("answer answered");
+      setQnIsAnswered(true);
+      quizQnFinished(questionNr.num);
+    }
   };
   const startTimer = () => {
     const time = new Date();
@@ -75,11 +95,12 @@ const index = ({
       setProgressBarClassName("progress-container"); //this starts the progressBar animation as it gets into viewport
     }
   }, [isVisible]);
-  useEffect(()=>{//this useefeect clears the useinterval on component unmount
-    return(()=>{
+  useEffect(() => {
+    //this useefeect clears the useinterval on component unmount
+    return () => {
       clearInterval(quizQnIntervalId.current);
-    })
-  },[])
+    };
+  }, []);
   return (
     <div
       className="question--container"

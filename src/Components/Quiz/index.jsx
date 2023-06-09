@@ -10,7 +10,6 @@ const index = () => {
     questionsLimit,
     categories,
     isQuizOver,
-    setQuizData,
   } = useQuiz(); //to get the quiz questions from the useQuiz hook
   const time = new Date();
   time.setSeconds(time.getSeconds() + 600); // 10 minutes timer
@@ -28,19 +27,9 @@ const index = () => {
       .replaceAll(",", ",  ")
       .toUpperCase();
   };
-  const formatedQuestions = (theQuizData) => {
-    //this function formats the quizData wih 1:randomised questions and answers so that the correct answer is in a random postion
-    return theQuizData.map((question, index) => ({
-      ...question,
-      randomAnswers: [
-        ...question.incorrectAnswers,
-        question.correctAnswer,
-      ].sort((a, b) => 0.5 - Math.random()),
-    }));
-  };
+
   useEffect(() => {
     !isQuizOver && (document.body.style.overflow = "hidden"); //to make the page nonscrollable
-    // setQuizData(formatedQuestions(quizData)); //this adds a new key to quizdata called random answers
   }, []);
 
   return (

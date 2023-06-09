@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, {  useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import RulesPopup from "../RulesPopup";
 import Popup from "reactjs-popup";
@@ -16,6 +16,12 @@ const index = () => {
   const client = axios.create({
     baseURL: "https://the-trivia-api.com/api/questions",
   });
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") === null
+      ? "light"
+      : localStorage.getItem("theme")
+    // this is to get the current theme stored in localstorage
+  ); //this is state for dark and light mode
   const fetchQuestions = () => {
     // Fetch questions on function call
     const categoriesStr = Object.entries(categories) //this takes all the selected categories and turns it into a string
@@ -48,6 +54,11 @@ const index = () => {
       ].sort((a, b) => 0.5 - Math.random()),
     }));
   };
+  useEffect(() => {
+    //this updates the body classname with corresponding theme
+    document.body.className = theme;
+  }, [theme]);
+  
 
   return (
     <>

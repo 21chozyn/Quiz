@@ -16,6 +16,9 @@ const index = () => {
       <div className="toHome btn" onClick={() => navigate("/")}>
         Home
       </div>
+      <div className="toQuizReview btn" onClick={() => navigate("/reviewQuiz")}>
+        Review questions
+      </div>
     </div>
   );
 };

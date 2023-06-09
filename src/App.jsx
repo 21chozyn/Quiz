@@ -4,6 +4,7 @@ import Home from "./Components/Home";
 import Quiz from "./Components/Quiz";
 import Settings from "./Components/Settings";
 import Results from "./Components/Results";
+import ReviewQuiz from "./Components/ReviewQuiz";
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/results" element={<Results />} />
+        <Route path="/reviewQuiz" element={<ReviewQuiz />} />
+
       </Routes>
     </Router>
   );
