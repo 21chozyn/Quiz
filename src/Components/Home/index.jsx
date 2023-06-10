@@ -8,9 +8,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
+export const saveDataToSession = (quizData)=>{ // exported to be usable in any component that wishes to save quizdata
+  localStorage.setItem("quizData", quizData)
+}
 const index = () => {
   const [openPopup, setOpenPopUp] = useState(false); // openPopup determines when to open and close the popup.
-  const { setQuizData, questionsLimit, categories, difficulty } =
+  const { setQuizData, questionsLimit, categories, difficulty,quizData } =
     useQuiz(); //this gets the quizData and setquizData method from our custom hook.
   const navigate = useNavigate();
   const client = axios.create({
@@ -58,8 +61,12 @@ const index = () => {
     //this updates the body classname with corresponding theme
     document.body.className = theme;
   }, [theme]);
-  
-
+  useEffect(() => {
+    //this useeffect saves quizdata to localstorage when comp unmounts
+    return () => {
+      saveDataToSession(quizData)
+    };
+  }, []); 
   return (
     <>
       <h1>Welcome to the quiz app</h1>

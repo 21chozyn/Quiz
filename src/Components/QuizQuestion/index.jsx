@@ -7,7 +7,9 @@ import { useTimer } from "react-timer-hook";
 import { useIsVisible } from "../Hooks/useIsVisible";
 import { useQuiz } from "../Hooks/QuizHook";
 import { useNavigate } from "react-router-dom";
+import { saveDataToSession } from "../Home";
 library.add(faCheck, faXmark); //this removes annoying console message "cannot find icon"
+
 const index = ({
   questionNr,
   question,
@@ -16,16 +18,26 @@ const index = ({
   category,
   expiryTimestamp,
   timePerQuestion,
+  isReviewPage,
+  userAnswer,
 }) => {
   const curQuizRef = useRef();
-  const isVisible = useIsVisible(curQuizRef);
-  const [answClassName, setAnswClassName] = useState("answer notAnswered");
+  const thisRef = useRef();
+  const isVisible = useIsVisible(isReviewPage ? thisRef : curQuizRef);
+  const [answClassName, setAnswClassName] = useState(
+    isReviewPage ? `answer answered ${questionNr.num}` : "answer notAnswered"
+  );
   const [progressBarClassName, setProgressBarClassName] = useState("");
   const [qnIsAnswered, setQnIsAnswered] = useState(false); // this state is used to stop user from clicking answers twice
 
   const { seconds, pause, restart } = useTimer({
     expiryTimestamp,
-    onExpire: () => quizQnFinished(questionNr.num),
+    onExpire: () =>
+      isReviewPage
+        ? () => {
+            return console.log("do nothing");
+          }
+        : quizQnFinished(questionNr.num),
   });
   const {
     isQuizOver,
@@ -49,13 +61,13 @@ const index = ({
   };
 
   const handleClick = (event) => {
-    if (!qnIsAnswered) {
+    if (!isReviewPage && !qnIsAnswered) {
       event.target.style.backgroundColor =
         event.target.id === "correct" ? "#8a7fb5" : "red"; //to change color of the clicked div
       event.target.id === "correct" && setCorrectQnsCount((prev) => prev + 1);
       const answer = event.target.querySelector("div").textContent; //this is to get the text inside the inner div
       addUserAnswer(answer);
-      setAnswClassName("answer answered");
+      setAnswClassName(`answer answered ${questionNr.num}`);
       setQnIsAnswered(true);
       quizQnFinished(questionNr.num);
     }
@@ -68,7 +80,7 @@ const index = ({
   const quizQnFinished = (curQuizNum) => {
     //this function is called when a question has been answered or time is up
     pause();
-    setAnswClassName("answer answered"); // to show wrong and correct answers
+    setAnswClassName(`answer answered ${questionNr.num}`); // to show wrong and correct answers
     setProgressBarClassName(""); //to remove the progress bar
     quizQnIntervalId.current = setTimeout(() => {
       const nextQn = document.getElementById(`question${curQuizNum + 1}`);
@@ -90,7 +102,7 @@ const index = ({
     isQuizOver && (document.body.style.overflow = "scroll");
   }, [isQuizOver]);
   useEffect(() => {
-    if (isVisible) {
+    if (!isReviewPage && isVisible) {
       startTimer();
       setProgressBarClassName("progress-container"); //this starts the progressBar animation as it gets into viewport
     }
@@ -101,6 +113,29 @@ const index = ({
       clearInterval(quizQnIntervalId.current);
     };
   }, []);
+  useEffect(() => {
+    //this useeffect saves quizdata to localstorage when comp unmounts
+    //this useeffect also styles the answers if isreviewpage
+    const highlightAnswers = () => {
+      const collection = document.getElementsByClassName(
+        `answer answered ${questionNr.num}` //this is neccessary to get answers of only this question
+      );
+      const answerElements = Array.from(collection); //to get these into an array
+      let usersAns = answerElements.reduce((acc, curElement) => { //this gives us the div which contains the users original answer
+        if (curElement.querySelector("div").innerText === userAnswer) {
+          return curElement;
+        }
+        return acc;
+      }, answerElements[0]);
+      usersAns.style.backgroundColor = usersAns.id === "correct" //to style the div according to weather users answer is correct or not
+        ? "#8a7fb5"
+        : "red";
+    };
+    isReviewPage && highlightAnswers(); //only call this function if we are on the quizquestion only
+    return () => {
+      saveDataToSession(quizData);
+    };
+  }, []);
   return (
     <div
       className="question--container"
@@ -109,6 +144,7 @@ const index = ({
         marginBottom: (window.innerHeight - 400) / 2,
         marginTop: (window.innerHeight - 400) / 2,
       }}
+      ref={thisRef}
     >
       <em>{`Question ${questionNr.num}/${questionNr.total}`}</em>
       <h2>{question}</h2>
@@ -126,14 +162,18 @@ const index = ({
         </div>
       ))}
       <h6>{category}</h6>
-      <h6 className="time-left">Time Left: {seconds} seconds</h6>
-      <div className={progressBarClassName} ref={curQuizRef}>
-        <progress
-          className="timer"
-          value={timePerQuestion - seconds}
-          max={timePerQuestion}
-        />
-      </div>
+      {!isReviewPage && (
+        <>
+          <h6 className="time-left">Time Left: {seconds} seconds</h6>
+          <div className={progressBarClassName} ref={curQuizRef}>
+            <progress
+              className="timer"
+              value={timePerQuestion - seconds}
+              max={timePerQuestion}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };

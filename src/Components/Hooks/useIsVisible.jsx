@@ -10,7 +10,7 @@ export function useIsVisible(ref) {
       setIntersecting(entry.isIntersecting)
     );
 
-    observer.observe(ref.current);
+    ref.current !== undefined && observer.observe(ref.current);
     return () => {
       observer.disconnect();
     };

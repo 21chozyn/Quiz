@@ -16,6 +16,14 @@ const quiz_data = [
     difficulty: "medium",
     regions: [],
     isNiche: false,
+    randomAnswers: [
+      "A general accuses soldiers of cowardice and their commanding officer must defend them.",
+      "The stepdaughter of a sadistic army officer escapes into an eerie fantasy world.",
+      "An ex-prize fighter struggles to stand up to his corrupt union bosses.",
+      "A group of thieves feel the pressure from the police when they leave a clue at their latest heist.",
+    ],
+    userAnswer:
+      "A group of thieves feel the pressure from the police when they leave a clue at their latest heist.",
   },
   {
     category: "Geography",
@@ -28,6 +36,8 @@ const quiz_data = [
     difficulty: "medium",
     regions: [],
     isNiche: false,
+    randomAnswers: ["Greece", "New Zealand", "Northern Ireland", "Vietnam"],
+    userAnswer:"Greece"
   },
   {
     category: "Arts & Literature",
@@ -40,6 +50,13 @@ const quiz_data = [
     difficulty: "hard",
     regions: [],
     isNiche: false,
+    randomAnswers: [
+      "Oscar Wilde",
+      "Joseph Conrad",
+      "Charles Dickens",
+      "Henryk Sienkiewicz",
+    ],
+    userAnswer:"Oscar Wilde"
   },
   {
     category: "Food & Drink",
@@ -52,6 +69,8 @@ const quiz_data = [
     difficulty: "medium",
     regions: [],
     isNiche: false,
+    randomAnswers: ["Greece ", "India", "Morocco", "Russia"],
+    userAnswer:"Greece "
   },
   {
     category: "Arts & Literature",
@@ -68,13 +87,24 @@ const quiz_data = [
     difficulty: "hard",
     regions: [],
     isNiche: false,
+    randomAnswers: [
+      "Edgar Rice Burroughs",
+      "James Fenimore Cooper",
+      "Jack London",
+      "Edgar Allan Poe",
+    ],
+    userAnswer:"Edgar Rice Burroughs"
   },
 ];
 const quizContext = createContext();
 export const useQuiz = () => useContext(quizContext);
 export default function QuizProvider({ children }) {
-  const [quizData, setQuizData] = useState(quiz_data);
-  const [questionsLimit, setQuestionsLimit] = useState(10);
+  const [quizData, setQuizData] = useState(
+    sessionStorage.getItem("quizData") === null
+      ? quiz_data
+      : sessionStorage.getItem("quizData")
+  );
+  const [questionsLimit, setQuestionsLimit] = useState(5);
   const [correctQnsCount, setCorrectQnsCount] = useState(0);
   const [categories, setCategories] = useState({
     general_knowledge: true,
