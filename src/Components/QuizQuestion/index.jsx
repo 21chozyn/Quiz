@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import QuitQuizPopUp from "../QuitQuizPopUp"
 import "./index.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -8,6 +9,7 @@ import { useIsVisible } from "../Hooks/useIsVisible";
 import { useQuiz } from "../Hooks/QuizHook";
 import { useNavigate } from "react-router-dom";
 import { saveDataToSession } from "../Home";
+import Popup from "reactjs-popup";
 library.add(faCheck, faXmark); //this removes annoying console message "cannot find icon"
 
 const index = ({
@@ -29,8 +31,8 @@ const index = ({
   );
   const [progressBarClassName, setProgressBarClassName] = useState("");
   const [qnIsAnswered, setQnIsAnswered] = useState(false); // this state is used to stop user from clicking answers twice
-
-  const { seconds, pause, restart } = useTimer({
+  const [openPopup,setOpenPopUp] = useState(false);// this state determines when to open quit popup
+  const { seconds, pause, restart ,start} = useTimer({
     expiryTimestamp,
     onExpire: () =>
       isReviewPage
@@ -60,7 +62,7 @@ const index = ({
     setQuizData(newQuizData);
   };
 
-  const handleClick = (event) => {
+  const handleAnswClick = (event) => {
     if (!isReviewPage && !qnIsAnswered) {
       event.target.style.backgroundColor =
         event.target.id === "correct" ? "#8a7fb5" : "red"; //to change color of the clicked div
@@ -72,6 +74,15 @@ const index = ({
       quizQnFinished(questionNr.num);
     }
   };
+  const handleQuit = ()=>{
+    setProgressBarClassName(""); //to remove the progress bar
+    if (isReviewPage) navigate("/results")
+    else{
+      pause();
+      setOpenPopUp(true)
+    }
+
+  }
   const startTimer = () => {
     const time = new Date();
     time.setSeconds(time.getSeconds() + 15);
@@ -79,6 +90,7 @@ const index = ({
   };
   const quizQnFinished = (curQuizNum) => {
     //this function is called when a question has been answered or time is up
+    if (isReviewPage) return //prevent function from running if this is review page
     pause();
     setAnswClassName(`answer answered ${questionNr.num}`); // to show wrong and correct answers
     setProgressBarClassName(""); //to remove the progress bar
@@ -97,6 +109,11 @@ const index = ({
         navigate("/results");
       }
     }, 2000);
+  };
+  const closePopUp = () => {
+    start();
+    setOpenPopUp(false);
+
   };
   useEffect(() => {
     isQuizOver && (document.body.style.overflow = "scroll");
@@ -152,7 +169,7 @@ const index = ({
         <div
           key={index}
           className={answClassName}
-          onClick={handleClick}
+          onClick={handleAnswClick}
           id={answer === correctAnswer ? "correct" : "wrong"} //to add a correct or false id to the div
         >
           <div className="answer-txt">{answer}</div>
@@ -161,7 +178,8 @@ const index = ({
           />
         </div>
       ))}
-      <h6>{category}</h6>
+      <h6 className="category">{category}</h6>
+      <div className="quit btn" onClick={handleQuit}>{isReviewPage ? "Show Results" : "Quit"}</div>
       {!isReviewPage && (
         <>
           <h6 className="time-left">Time Left: {seconds} seconds</h6>
@@ -174,6 +192,9 @@ const index = ({
           </div>
         </>
       )}
+      <Popup open={openPopup} closeOnDocumentClick onClose={closePopUp}>
+        <QuitQuizPopUp></QuitQuizPopUp>
+      </Popup>
     </div>
   );
 };

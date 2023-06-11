@@ -26,6 +26,14 @@
       pointer-events: none; //this is to prevent the inner div to be clickable
     }
   }
+  .quit{
+    float: right;
+    margin-right: 20px;
+  }
+  .category{
+    display: inline-block;
+    margin-left: 20px;
+  }
   .notAnswered {
     cursor: pointer;
   }

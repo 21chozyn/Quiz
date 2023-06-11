@@ -55,6 +55,7 @@ const index = () => {
             expiryTimestamp={time}
             timePerQuestion={30}
             isReviewPage={false}
+            userAnswer={null}
             key={index}
           ></QuizQuestion>
         );

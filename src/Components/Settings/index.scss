@@ -78,8 +78,8 @@
   .question--container {
     border: 2px solid rgb(179, 177, 177);
   }
-  .circular-progress {
-    background: conic-gradient(#7d2ae8 3.6deg, rgb(179, 177, 177) 0deg) !important;
+  .progress--value{
+    color: rgb(179, 177, 177) !important;
   }
   .circular-progress::before {
     background-color: #0a0327 !important;
