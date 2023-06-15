@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import RulesPopup from "../RulesPopup";
 import Popup from "reactjs-popup";
@@ -7,13 +7,15 @@ import { useQuiz } from "../Hooks/QuizHook";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import "./index.scss";
 
-export const saveDataToSession = (quizData)=>{ // exported to be usable in any component that wishes to save quizdata
-  localStorage.setItem("quizData", quizData)
-}
+export const saveDataToSession = (quizData) => {
+  // exported to be usable in any component that wishes to save quizdata
+  localStorage.setItem("quizData", quizData);
+};
 const index = () => {
   const [openPopup, setOpenPopUp] = useState(false); // openPopup determines when to open and close the popup.
-  const { setQuizData, questionsLimit, categories, difficulty,quizData } =
+  const { setQuizData, questionsLimit, categories, difficulty, quizData } =
     useQuiz(); //this gets the quizData and setquizData method from our custom hook.
   const navigate = useNavigate();
   const client = axios.create({
@@ -37,7 +39,7 @@ const index = () => {
         `?categories=${categoriesStr}&limit=${questionsLimit}&difficulty=${difficulty}`
       )
       .then((response) => {
-        setQuizData(formatedQuestions(response.data));//this adds a new key to quizdata called random answers
+        setQuizData(formatedQuestions(response.data)); //this adds a new key to quizdata called random answers
       });
   };
   const closePopUp = () => {
@@ -64,27 +66,31 @@ const index = () => {
   useEffect(() => {
     //this useeffect saves quizdata to localstorage when comp unmounts
     return () => {
-      saveDataToSession(quizData)
+      saveDataToSession(quizData);
     };
-  }, []); 
+  }, []);
   return (
     <>
-      <h1>Welcome to the quiz app</h1>
-      <div
-        className="playNow btn"
-        data-tooltip-id="playNowTooltip"
-        data-tooltip-content="Tip: edit difficulty and categories in settings!"
-        onClick={handleStartQuiz}
-      >
-        Play now
-      </div>
-      <div
-        className="toSettings btn"
-        onClick={() => {
-          navigate("/settings");
-        }}
-      >
-        <FontAwesomeIcon icon={faGear} />
+      <div className="home-container">
+        <h1>Hi, lets play a quiz</h1>
+        <div className="Buttons-container">
+          <div
+            className="playNow btn"
+            data-tooltip-id="playNowTooltip"
+            data-tooltip-content="Tip: edit difficulty and categories in settings!"
+            onClick={handleStartQuiz}
+          >
+            Play now
+          </div>
+          <div
+            className="toSettings btn"
+            onClick={() => {
+              navigate("/settings");
+            }}
+          >
+            <FontAwesomeIcon icon={faGear} />
+          </div>
+        </div>
       </div>
 
       <Tooltip id="playNowTooltip"></Tooltip>

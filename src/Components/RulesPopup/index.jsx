@@ -22,8 +22,7 @@ const RulesPopup = () => {
           to="/quiz"
           className="team-link"  
         >
-          Proceed with default settings
-        </NavLink>
+          Proceed        </NavLink>
         <NavLink
           exact="true"
           activeclassname="active"

@@ -24,6 +24,7 @@ const index = () => {
     questionsLimit,
     categories,
     isQuizOver,
+    setCorrectQnsCount
   } = useQuiz(); //to get the quiz questions from the useQuiz hook
   const time = new Date();
   time.setSeconds(time.getSeconds() + 600); // 10 minutes timer
@@ -32,6 +33,7 @@ const index = () => {
 
   useEffect(() => {
     !isQuizOver && (document.body.style.overflow = "hidden"); //to make the page nonscrollable
+    setCorrectQnsCount(0)//to ensure that each quiz starts at 0
   }, []);
 
   return (
