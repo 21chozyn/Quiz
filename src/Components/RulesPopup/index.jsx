@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import "./index.scss";
+import { useQuiz } from "../Hooks/QuizHook";
 
 const rules = [
   "You get 25 seconds to answer each question, Watch the timer at the top;",
@@ -12,6 +13,7 @@ const rules = [
   "And lastly, ALL THE BEST ! ! !",
 ];
 const RulesPopup = () => {
+  const {setIsQuizOver} = useQuiz()
   const spanRules = rules.map((rule, index) => <li key={index}>{rule}</li>);
   return (
     <div className="popup rules">
@@ -21,6 +23,7 @@ const RulesPopup = () => {
           activeclassname="active"
           to="/quiz"
           className="team-link"  
+          onClick={()=>setIsQuizOver(false)}
         >
           Proceed        </NavLink>
         <NavLink

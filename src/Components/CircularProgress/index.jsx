@@ -10,14 +10,20 @@ const index = () => {
   const progressIntervalId = useRef(null); // Create a ref to store the progress interval ID
   useEffect(()=>{
     setPercentage(Math.round((correctQnsCount * 100) / questionsLimit)) // this updates useQuiz with the calculated percentage
-  },[])
-  useEffect(() => {
     progressIntervalId.current = setInterval(() => {
       setProgressStartValue((prev) => prev + 1);
     }, speed);
     return ()=>{
       clearInterval(progressIntervalId.current);
     }
+  },[])
+  useEffect(() => {
+    // progressIntervalId.current = setInterval(() => {
+    //   setProgressStartValue((prev) => prev + 1);
+    // }, speed);
+    // return ()=>{
+    //   clearInterval(progressIntervalId.current);
+    // }
   }, []);
   useEffect(() => {
     if (progressStartValue == percentage) {

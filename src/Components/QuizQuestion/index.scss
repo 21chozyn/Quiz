@@ -1,39 +1,52 @@
 .question--container {
   margin: 5px;
+  margin-top: 20vh;
+  scroll-margin: 20vh;
+  height: 80vh;
   em {
     color: orangered;
     font-size: 1.3rem;
   }
-  .answer {
-    display: grid;
-    grid-template-columns: 14fr 1fr;
-    width: 80%;
-    padding: 10px 20px;
-    margin: 10px;
-    background-color: white;
-    color: black;
-    text-align: center;
-    font-size: 1rem;
-    border-radius: 5px;
-    position: relative;
-    left: 50%;
-    top: 0%;
-    transform: translate(-50%, -50%);
-    transition: all 0.25s;
-    svg {
-      display: none;
-    }
-    .answer-txt {
-      pointer-events: none; //this is to prevent the inner div to be clickable
+  h2 {
+    max-height: 15vh;
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+  }
+  .answers--container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 45vh;
+    justify-content: space-around;
+    .answer {
+      display: grid;
+      grid-template-columns: 90% 10%;
+      // width: 80%;
+      // padding: 10px 20px;
+      min-height: 3rem;
+      background-color: white;
+      color: black;
+      text-align: center;
+      font-size: 1rem;
+      border-radius: 5px;
+      position: relative;
+
+      transition: all 0.25s;
+
+      .answer-txt {
+        pointer-events: none; //this is to prevent the inner div to be clickable
+      }
     }
   }
-  .quit{
-    float: right;
-    margin-right: 20px;
-  }
-  .category{
-    display: inline-block;
-    margin-left: 20px;
+  .last-sect-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    .quit {
+      height: 50px;
+    }
+   
   }
   .notAnswered {
     cursor: pointer;
@@ -44,11 +57,16 @@
   .notAnswered:active {
     background-color: #8a7fb5;
     box-shadow: 0 5px #666;
-    transform: translate(-50%, -50%) scale(1.05);
+    transform: scale(1.05);
   }
   .answered {
     svg {
       display: inherit;
+    }
+  }
+  .notAnswered {
+    svg {
+      display: none;
     }
   }
   .correct {
@@ -79,24 +97,21 @@
     height: 100%;
     width: 0%;
     background-color: #8a7fb5;
-    animation: timerAnimation 15s linear forwards ;
-
+    animation: timerAnimation 15s linear forwards;
   }
-  .time-left{
+  .time-left {
     text-align: center;
     font-size: 1.5rem;
     margin: 0;
   }
   @keyframes timerAnimation {
-    from{
+    from {
       width: 0%;
       background-color: #8a7fb5;
     }
-    to{
+    to {
       width: 100%;
       background-color: red;
     }
-    
   }
 }
-

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import QuitQuizPopUp from "../QuitQuizPopUp"
+import QuitQuizPopUp from "../QuitQuizPopUp";
 import "./index.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -31,8 +31,9 @@ const index = ({
   );
   const [progressBarClassName, setProgressBarClassName] = useState("");
   const [qnIsAnswered, setQnIsAnswered] = useState(false); // this state is used to stop user from clicking answers twice
-  const [openPopup,setOpenPopUp] = useState(false);// this state determines when to open quit popup
-  const { seconds, pause, restart ,start} = useTimer({
+  const [openPopup, setOpenPopUp] = useState(false); // this state determines when to open quit popup
+  const [canScroll, setCanScroll] = useState(true); // this state is used to prevent scrollintoView of an already answered qn.
+  const { seconds, pause, restart, start } = useTimer({
     expiryTimestamp,
     onExpire: () =>
       isReviewPage
@@ -74,15 +75,14 @@ const index = ({
       quizQnFinished(questionNr.num);
     }
   };
-  const handleQuit = ()=>{
+  const handleQuit = () => {
     setProgressBarClassName(""); //to remove the progress bar
-    if (isReviewPage) navigate("/results")
-    else{
+    if (isReviewPage) navigate("/results");
+    else {
       pause();
-      setOpenPopUp(true)
+      setOpenPopUp(true);
     }
-
-  }
+  };
   const startTimer = () => {
     const time = new Date();
     time.setSeconds(time.getSeconds() + 15);
@@ -90,22 +90,24 @@ const index = ({
   };
   const quizQnFinished = (curQuizNum) => {
     //this function is called when a question has been answered or time is up
-    if (isReviewPage) return //prevent function from running if this is review page
+    if (isReviewPage) return; //prevent function from running if this is review page
     pause();
     setAnswClassName(`answer answered ${questionNr.num}`); // to show wrong and correct answers
     setProgressBarClassName(""); //to remove the progress bar
     quizQnIntervalId.current = setTimeout(() => {
       const nextQn = document.getElementById(`question${curQuizNum + 1}`);
       if (nextQn) {
-        // 👇 Will scroll smoothly to the top of the next section
-        nextQn.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-          inline: "center",
-        });
+        console.log("nextqn ", nextQn);
+        canScroll &&
+          nextQn.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        setCanScroll(false);
       } else {
-        setIsQuizOver(true);
         console.log("quiz is finished");
+
+        setIsQuizOver(true);
         navigate("/results");
       }
     }, 2000);
@@ -113,7 +115,6 @@ const index = ({
   const closePopUp = () => {
     start();
     setOpenPopUp(false);
-
   };
   useEffect(() => {
     isQuizOver && (document.body.style.overflow = "scroll");
@@ -138,15 +139,17 @@ const index = ({
         `answer answered ${questionNr.num}` //this is neccessary to get answers of only this question
       );
       const answerElements = Array.from(collection); //to get these into an array
-      let usersAns = answerElements.reduce((acc, curElement) => { //this gives us the div which contains the users original answer
+      let usersAns = answerElements.reduce((acc, curElement) => {
+        //this gives us the div which contains the users original answer
         if (curElement.querySelector("div").innerText === userAnswer) {
           return curElement;
         }
         return acc;
       }, answerElements[0]);
-      usersAns.style.backgroundColor = usersAns.id === "correct" //to style the div according to weather users answer is correct or not
-        ? "#8a7fb5"
-        : "red";
+      usersAns.style.backgroundColor =
+        usersAns.id === "correct" //to style the div according to weather users answer is correct or not
+          ? "#8a7fb5"
+          : "red";
     };
     isReviewPage && highlightAnswers(); //only call this function if we are on the quizquestion only
     return () => {
@@ -157,29 +160,32 @@ const index = ({
     <div
       className="question--container"
       id={`question${questionNr.num}`}
-      style={{
-        marginBottom: (window.innerHeight - 400) / 2,
-        marginTop: (window.innerHeight - 400) / 2,
-      }}
       ref={thisRef}
     >
       <em>{`Question ${questionNr.num}/${questionNr.total}`}</em>
       <h2>{question}</h2>
-      {answers.map((answer, index) => (
-        <div
-          key={index}
-          className={answClassName}
-          onClick={handleAnswClick}
-          id={answer === correctAnswer ? "correct" : "wrong"} //to add a correct or false id to the div
-        >
-          <div className="answer-txt">{answer}</div>
-          <FontAwesomeIcon
-            icon={answer === correctAnswer ? faCheck : faXmark}
-          />
+      <div className="answers--container">
+        {answers.map((answer, index) => (
+          <div
+            key={index}
+            className={answClassName}
+            onClick={handleAnswClick}
+            id={answer === correctAnswer ? "correct" : "wrong"} //to add a correct or false id to the div
+          >
+            <div className="answer-txt">{answer}</div>
+            <FontAwesomeIcon
+              icon={answer === correctAnswer ? faCheck : faXmark}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="last-sect-container">
+        <h6 className="category">{category}</h6>
+        <div className="quit btn" onClick={handleQuit}>
+          {isReviewPage ? "Show Results" : "Quit"}
         </div>
-      ))}
-      <h6 className="category">{category}</h6>
-      <div className="quit btn" onClick={handleQuit}>{isReviewPage ? "Show Results" : "Quit"}</div>
+      </div>
+
       {!isReviewPage && (
         <>
           <h6 className="time-left">Time Left: {seconds} seconds</h6>
