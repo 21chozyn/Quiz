@@ -21,9 +21,8 @@
     justify-content: space-around;
     .answer {
       display: grid;
+      place-items: center;
       grid-template-columns: 90% 10%;
-      // width: 80%;
-      // padding: 10px 20px;
       min-height: 3rem;
       background-color: white;
       color: black;
@@ -112,6 +111,16 @@
     to {
       width: 100%;
       background-color: red;
+    }
+  }
+}
+@media (max-width: 430px) {
+  .question--container{
+    height: 84.5vh;
+    margin-top: 10.5vh;
+    scroll-margin: 10.5vh;
+    .answers--container{
+      height: 50vh;
     }
   }
 }
