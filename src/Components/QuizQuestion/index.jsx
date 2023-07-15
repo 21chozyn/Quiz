@@ -189,6 +189,9 @@ const index = ({
       {!isReviewPage && (
         <>
           <h6 className="time-left">Time Left: {seconds} seconds</h6>
+          {seconds < 10 && (
+            <h6 className="time-left top" >Time Left: {seconds} seconds!!</h6>
+          )}
           <div className={progressBarClassName} ref={curQuizRef}>
             <progress
               className="timer"

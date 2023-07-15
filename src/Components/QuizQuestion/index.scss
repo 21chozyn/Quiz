@@ -103,6 +103,17 @@
     font-size: 1.5rem;
     margin: 0;
   }
+  .top{
+    //this is for the time left text to be at the top of screen
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    padding: 1rem 0;
+    width: 100vw;
+    color: red;
+    background-color: #8a7fb5;
+  }
   @keyframes timerAnimation {
     from {
       width: 0%;
